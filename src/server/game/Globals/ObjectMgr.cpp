@@ -10204,6 +10204,24 @@ void ObjectMgr::LoadCreatureDefaultTrainers()
     TC_LOG_INFO("server.loading", ">> Loaded " SZFMTD " default trainers in %u ms", _creatureDefaultTrainers.size(), GetMSTimeDiffToNow(oldMSTime));
 }
 
+// @tswow-begin
+void ObjectMgr::LoadClassRuneTable()
+{
+    _classHasRunes.clear();
+    if (QueryResult result = WorldDatabase.Query("SELECT classID, hasRune class_has_runes"))
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 classID = fields[0].GetUInt32();
+            uint32 hasRune = fields[1].GetUInt32();
+            _classHasRunes[classID] = hasRune;
+
+        } while (result->NextRow());
+    }
+}
+// @tswow-end
+
 uint32 ObjectMgr::LoadReferenceVendor(int32 vendor, int32 item, std::set<uint32>* skip_vendors)
 {
     // find all items from the reference vendor

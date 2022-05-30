@@ -5218,9 +5218,10 @@ void Spell::EffectActivateRune()
 
     Player* player = m_caster->ToPlayer();
 
-    if (player->GetClass() != CLASS_DEATH_KNIGHT)
+    //@tswow-begin
+    if (!sObjectMgr->_classHasRunes[player->GetClass()])
         return;
-
+    //@tswow-end
     // needed later
     m_runesState = m_caster->ToPlayer()->GetRunesState();
 

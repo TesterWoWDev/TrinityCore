@@ -2066,6 +2066,11 @@ void World::SetInitialWorldSettings()
     TC_LOG_INFO("server.loading", "Loading Creature default trainers...");
     sObjectMgr->LoadCreatureDefaultTrainers();
 
+    // @tswow-begin
+    TC_LOG_INFO("server.loading", "Loading Custom Class Runes...");
+    sObjectMgr->LoadClassRuneTable();
+    // @tswow-end
+
     TC_LOG_INFO("server.loading", "Loading Gossip menu...");
     sObjectMgr->LoadGossipMenu();
 

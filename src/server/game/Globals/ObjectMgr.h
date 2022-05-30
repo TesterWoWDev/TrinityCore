@@ -1005,6 +1005,10 @@ class TC_GAME_API ObjectMgr
 
         typedef std::map<uint32, uint32> CharacterConversionMap;
 
+        // @tswow-begin
+        std::unordered_map<uint32, uint32> _classHasRunes;
+        // @tswow-end
+
         typedef std::unordered_map<uint32, std::shared_ptr<CreatureOutfit>> CreatureOutfitContainer;
 
         GameObjectTemplate const* GetGameObjectTemplate(uint32 entry) const;
@@ -1315,6 +1319,9 @@ class TC_GAME_API ObjectMgr
         void LoadTrainers();
         void LoadCreatureDefaultTrainers();
 
+        //@tswow-begin
+        void LoadClassRuneTable();
+        //@tswow-end
         void InitializeQueriesData(QueryDataGroup mask);
 
         std::string GeneratePetName(uint32 entry);

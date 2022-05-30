@@ -1314,9 +1314,10 @@ void Player::Update(uint32 p_time)
                 ++itr;
         }
     }
-
-    if (GetClass() == CLASS_DEATH_KNIGHT)
+    //@tswow-begin
+    if (sObjectMgr->_classHasRunes[GetClass()])
     {
+    //@tswow-end
         // Update rune timers
         for (uint8 i = 0; i < MAX_RUNES; ++i)
         {
@@ -2018,10 +2019,15 @@ void Player::RegenerateAll()
     Regenerate(POWER_MANA);
 
     // Runes act as cooldowns, and they don't need to send any data
-    if (GetClass() == CLASS_DEATH_KNIGHT)
+    //@tswow-begin
+    if (sObjectMgr->_classHasRunes[GetClass()])
+    {
+    //@tswow-end
         for (uint8 i = 0; i < MAX_RUNES; ++i)
             if (uint32 cd = GetRuneCooldown(i))
                 SetRuneCooldown(i, (cd > m_regenTimer) ? cd - m_regenTimer : 0);
+
+    }
 
     if (m_regenTimerCount >= 2000)
     {
@@ -2034,7 +2040,8 @@ void Player::RegenerateAll()
         }
 
         Regenerate(POWER_RAGE);
-        if (GetClass() == CLASS_DEATH_KNIGHT)
+        //@tswow-begin
+        if (sObjectMgr->_classHasRunes[GetClass()])
             Regenerate(POWER_RUNIC_POWER);
 
         m_regenTimerCount -= 2000;
@@ -24682,7 +24689,8 @@ void Player::AtExitCombat()
     Unit::AtExitCombat();
     UpdatePotionCooldown();
 
-    if (GetClass() == CLASS_DEATH_KNIGHT)
+    //@tswow-begin
+    if (sObjectMgr->_classHasRunes[GetClass()])
         for (uint8 i = 0; i < MAX_RUNES; ++i)
         {
             SetRuneTimer(i, 0xFFFFFFFF);
@@ -25075,8 +25083,10 @@ void Player::ConvertRune(uint8 index, RuneType newType)
 
 void Player::ResyncRunes() const
 {
-    if (GetClass() != CLASS_DEATH_KNIGHT)
+    //@tswow-begin
+    if (!sObjectMgr->_classHasRunes[GetClass()])
         return;
+    //@tswow-end
 
     WorldPackets::Spells::ResyncRunes packet;
     packet.Count = MAX_RUNES;
@@ -25109,8 +25119,10 @@ static RuneType runeSlotTypes[MAX_RUNES] =
 
 void Player::InitRunes()
 {
-    if (GetClass() != CLASS_DEATH_KNIGHT)
+    //@tswow-begin
+    if (!sObjectMgr->_classHasRunes[GetClass()])
         return;
+    //@tswow-end
 
     m_runes = new Runes;
 

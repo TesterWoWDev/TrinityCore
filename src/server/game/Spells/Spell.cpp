@@ -4278,12 +4278,14 @@ void Spell::SendSpellGo()
         && m_spellInfo->PowerType != POWER_HEALTH)
         castFlags |= CAST_FLAG_POWER_LEFT_SELF;
 
+    //@tswow-begin
     if ((m_caster->GetTypeId() == TYPEID_PLAYER)
-        && (m_caster->ToPlayer()->GetClass() == CLASS_DEATH_KNIGHT)
+        && (sObjectMgr->_classHasRunes[m_caster->ToPlayer()->GetClass()])
         && m_spellInfo->RuneCostID
         && m_spellInfo->PowerType == POWER_RUNE
         && !(_triggeredCastFlags & TRIGGERED_IGNORE_POWER_AND_REAGENT_COST))
     {
+    //@tswow-end
         castFlags |= CAST_FLAG_NO_GCD; // not needed, but Blizzard sends it
         castFlags |= CAST_FLAG_RUNE_LIST; // rune cooldowns list
     }
@@ -4863,8 +4865,10 @@ SpellCastResult Spell::CheckRuneCost(uint32 runeCostID) const
     if (!player)
         return SPELL_CAST_OK;
 
-    if (player->GetClass() != CLASS_DEATH_KNIGHT)
+    //@tswow-begin
+    if (!sObjectMgr->_classHasRunes[player->GetClass()])
         return SPELL_CAST_OK;
+    //@tswow-end
 
     SpellRuneCostEntry const* src = sSpellRuneCostStore.LookupEntry(runeCostID);
     if (!src)
@@ -4903,8 +4907,10 @@ SpellCastResult Spell::CheckRuneCost(uint32 runeCostID) const
 
 void Spell::TakeRunePower(bool didHit)
 {
-    if (m_caster->GetTypeId() != TYPEID_PLAYER || m_caster->ToPlayer()->GetClass() != CLASS_DEATH_KNIGHT)
+    //@tswow-begin
+    if (m_caster->GetTypeId() != TYPEID_PLAYER || !sObjectMgr->_classHasRunes[m_caster->ToPlayer()->GetClass()])
         return;
+    //@tswow-end
 
     SpellRuneCostEntry const* runeCostData = sSpellRuneCostStore.LookupEntry(m_spellInfo->RuneCostID);
     if (!runeCostData || (runeCostData->NoRuneCost() && runeCostData->NoRunicPowerGain()))
