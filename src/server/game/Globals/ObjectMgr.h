@@ -1006,7 +1006,8 @@ class TC_GAME_API ObjectMgr
         typedef std::map<uint32, uint32> CharacterConversionMap;
 
         // @tswow-begin
-        std::unordered_map<uint32, uint32> _classHasRunes;
+        uint32 _classHasRunes;
+        uint32 _raceHasRunes[MAX_RACES] = {};
         // @tswow-end
 
         typedef std::unordered_map<uint32, std::shared_ptr<CreatureOutfit>> CreatureOutfitContainer;
@@ -1320,7 +1321,7 @@ class TC_GAME_API ObjectMgr
         void LoadCreatureDefaultTrainers();
 
         //@tswow-begin
-        void LoadClassRuneTable();
+        void LoadRaceClassRuneCombos();
         //@tswow-end
         void InitializeQueriesData(QueryDataGroup mask);
 

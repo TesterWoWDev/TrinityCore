@@ -4296,7 +4296,7 @@ void Spell::SendSpellGo()
 
     //@tswow-begin
     if ((m_caster->GetTypeId() == TYPEID_PLAYER)
-        && (sObjectMgr->_classHasRunes[m_caster->ToPlayer()->GetClass()])
+        && (m_caster->ToPlayer()->MatchRaceClassMask(sObjectMgr->_raceHasRunes[m_caster->ToPlayer()->GetClass()], sObjectMgr->_classHasRunes,false))
         && m_spellInfo->RuneCostID
         && m_spellInfo->PowerType == POWER_RUNE
         && !(_triggeredCastFlags & TRIGGERED_IGNORE_POWER_AND_REAGENT_COST))
@@ -4882,7 +4882,7 @@ SpellCastResult Spell::CheckRuneCost(uint32 runeCostID) const
         return SPELL_CAST_OK;
 
     //@tswow-begin
-    if (!sObjectMgr->_classHasRunes[player->GetClass()])
+    if (!player->MatchRaceClassMask(sObjectMgr->_raceHasRunes[player->GetClass()], sObjectMgr->_classHasRunes,false))
         return SPELL_CAST_OK;
     //@tswow-end
 
@@ -4924,7 +4924,7 @@ SpellCastResult Spell::CheckRuneCost(uint32 runeCostID) const
 void Spell::TakeRunePower(bool didHit)
 {
     //@tswow-begin
-    if (m_caster->GetTypeId() != TYPEID_PLAYER || !sObjectMgr->_classHasRunes[m_caster->ToPlayer()->GetClass()])
+    if (m_caster->GetTypeId() != TYPEID_PLAYER || !m_caster->ToPlayer()->MatchRaceClassMask(sObjectMgr->_raceHasRunes[m_caster->ToPlayer()->GetClass()], sObjectMgr->_classHasRunes, false))
         return;
     //@tswow-end
 

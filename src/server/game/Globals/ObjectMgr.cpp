@@ -10205,17 +10205,18 @@ void ObjectMgr::LoadCreatureDefaultTrainers()
 }
 
 // @tswow-begin
-void ObjectMgr::LoadClassRuneTable()
+void ObjectMgr::LoadRaceClassRuneCombos()
 {
-    _classHasRunes.clear();
-    if (QueryResult result = WorldDatabase.Query("SELECT classID, hasRune FROM class_has_runes"))
+    _classHasRunes = 0;
+    if (QueryResult result = WorldDatabase.Query("SELECT classID, raceID FROM class_has_runes"))
     {
         do
         {
             Field* fields = result->Fetch();
             uint32 classID = fields[0].GetUInt32();
-            uint32 hasRune = fields[1].GetUInt32();
-            _classHasRunes[classID] = hasRune;
+            uint32 raceID = fields[1].GetUInt32();
+            _classHasRunes |= (1 << (classID - 1));
+            _raceHasRunes[classID] |= (1 << (raceID - 1));
 
         } while (result->NextRow());
     }
