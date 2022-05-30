@@ -3891,13 +3891,6 @@ uint32 Player::ResetTalentsCost() const
 
 bool Player::ResetTalents(bool no_cost)
 {
-    // @tswow-begin
-    FIRE(
-          PlayerOnTalentsResetEarly
-        , TSPlayer(this)
-        , TSMutable<bool>(&no_cost)
-    );
-    // @tswow-end
     sScriptMgr->OnPlayerTalentsReset(this, no_cost);
 
     // not need after this call
@@ -3945,7 +3938,7 @@ bool Player::ResetTalents(bool no_cost)
         if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
             continue;
 
-        for (int8 rank = MAX_TALENT_RANK-1; rank >= 0; --rank)
+        for (int8 rank = MAX_TALENT_RANK - 1; rank >= 0; --rank)
         {
             // skip non-existing talent ranks
             if (talentInfo->SpellRank[rank] == 0)
@@ -3989,14 +3982,6 @@ bool Player::ResetTalents(bool no_cost)
             RemovePet(nullptr, PET_SAVE_NOT_IN_SLOT, true);
     }
     */
-
-    // @tswow-begin
-    FIRE(
-          PlayerOnTalentsResetLate
-        , TSPlayer(this)
-        , no_cost
-    );
-    // @tswow-end
 
     return true;
 }
@@ -25201,7 +25186,6 @@ void Player::AutoStoreLoot(uint8 bag, uint8 slot, uint32 loot_id, LootStore cons
         SendNewItem(pItem, lootItem->count, false, createdByPlayer, broadcast);
     }
 }
-
 void Player::StoreLootItem(uint8 lootSlot, Loot* loot)
 {
     NotNormalLootItem* qitem = nullptr;
@@ -25244,13 +25228,13 @@ void Player::StoreLootItem(uint8 lootSlot, Loot* loot)
         Item* newitem = StoreNewItem(dest, item->itemid, true, item->randomPropertyId, looters);
 
         // @tswow-begin
-        FIRE_MAP( newitem->GetTemplate()->events
-                , ItemOnTakenAsLoot
-                , TSItem(newitem)
-                , TSLootItem(item)
-                , TSLoot(loot)
-                , TSPlayer(this)
-                );
+        FIRE_MAP(newitem->GetTemplate()->events
+            , ItemOnTakenAsLoot
+            , TSItem(newitem)
+            , TSLootItem(item)
+            , TSLoot(loot)
+            , TSPlayer(this)
+        );
         // @tswow-end
 
         if (qitem)
@@ -25299,34 +25283,21 @@ void Player::StoreLootItem(uint8 lootSlot, Loot* loot)
         SendEquipError(msg, nullptr, nullptr, item->itemid);
 }
 
-// @tswow-begin change layout to attach event
 uint32 Player::CalculateTalentsPoints() const
 {
-    uint32 base_talent = GetLevel() < 10 ? 0 : GetLevel()-9;
-    uint32 out_talent;
+    uint32 base_talent = GetLevel() < 10 ? 0 : GetLevel() - 9;
 
     if (GetClass() != CLASS_DEATH_KNIGHT || GetMapId() != 609)
-    {
-        out_talent = uint32(base_talent * sWorld->getRate(RATE_TALENT));
-    }
-    else
-    {
-        uint32 talentPointsForLevel = GetLevel() < 56 ? 0 : GetLevel() - 55;
-        talentPointsForLevel += m_questRewardTalentCount;
+        return uint32(base_talent * sWorld->getRate(RATE_TALENT)) + m_questRewardTalentCount;
 
-        if (talentPointsForLevel > base_talent)
-            talentPointsForLevel = base_talent;
+    uint32 talentPointsForLevel = GetLevel() < 56 ? 0 : GetLevel() - 55;
+    talentPointsForLevel += m_questRewardTalentCount;
 
-        out_talent = uint32(talentPointsForLevel * sWorld->getRate(RATE_TALENT));
-    }
-    FIRE(
-          PlayerOnCalculateTalentPoints
-        , TSPlayer(const_cast<Player*>(this))
-        , TSMutable<uint32>(&out_talent)
-    )
-    return out_talent;
+    if (talentPointsForLevel > base_talent)
+        talentPointsForLevel = base_talent;
+
+    return uint32(talentPointsForLevel * sWorld->getRate(RATE_TALENT));
 }
-// @tswow-end
 
 bool Player::CanFlyInZone(uint32 mapid, uint32 zone, SpellInfo const* bySpell) const
 {
