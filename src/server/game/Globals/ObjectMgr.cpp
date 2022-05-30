@@ -10208,7 +10208,7 @@ void ObjectMgr::LoadCreatureDefaultTrainers()
 void ObjectMgr::LoadClassRuneTable()
 {
     _classHasRunes.clear();
-    if (QueryResult result = WorldDatabase.Query("SELECT classID, hasRune class_has_runes"))
+    if (QueryResult result = WorldDatabase.Query("SELECT classID, hasRune FROM class_has_runes"))
     {
         do
         {
