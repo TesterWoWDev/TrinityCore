@@ -1697,7 +1697,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     if (target->GetTypeId() != TYPEID_PLAYER)
                         break;
                     //@tswow-begin
-                    if (!target->MatchRaceClassMask(sObjectMgr->_raceHasRunes[target->GetClass()], sObjectMgr->_classHasRunes,false))
+                    if (!target->ToPlayer()->HasRunes())
                         break;
                     //@tswow-end
 

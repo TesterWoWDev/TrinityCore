@@ -4856,7 +4856,7 @@ void AuraEffect::HandleAuraConvertRune(AuraApplication const* aurApp, uint8 mode
         return;
 
     //@tswow-begin
-    if (!player->MatchRaceClassMask(sObjectMgr->_raceHasRunes[player->GetClass()], sObjectMgr->_classHasRunes,false))
+    if (!player->HasRunes())
         return;
     //@tswow-end
 

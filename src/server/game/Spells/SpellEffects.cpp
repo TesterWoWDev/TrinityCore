@@ -5226,7 +5226,7 @@ void Spell::EffectActivateRune()
     Player* player = m_caster->ToPlayer();
 
     //@tswow-begin
-    if (!player->MatchRaceClassMask(sObjectMgr->_raceHasRunes[player->GetClass()], sObjectMgr->_classHasRunes,false))
+    if (!player->HasRunes())
         return;
     //@tswow-end
     // needed later

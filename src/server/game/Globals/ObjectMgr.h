@@ -1007,8 +1007,7 @@ class TC_GAME_API ObjectMgr
         typedef std::map<uint32, uint32> CharacterConversionMap;
 
         // @tswow-begin
-        uint32 _classHasRunes;
-        uint32 _raceHasRunes[MAX_RACES] = {};
+        uint32 _classHasRunes[MAX_CLASSES] = {};
         // @tswow-end
 
         typedef std::unordered_map<uint32, std::shared_ptr<CreatureOutfit>> CreatureOutfitContainer;

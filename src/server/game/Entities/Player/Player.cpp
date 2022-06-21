@@ -1322,7 +1322,7 @@ void Player::Update(uint32 p_time)
         }
     }
     //@tswow-begin
-    if (MatchRaceClassMask(sObjectMgr->_raceHasRunes[GetClass()], sObjectMgr->_classHasRunes,false))
+    if (HasRunes())
     {
     //@tswow-end
         // Update rune timers
@@ -2027,7 +2027,7 @@ void Player::RegenerateAll()
 
     // Runes act as cooldowns, and they don't need to send any data
     //@tswow-begin
-    if (MatchRaceClassMask(sObjectMgr->_raceHasRunes[GetClass()], sObjectMgr->_classHasRunes,false))
+    if (HasRunes())
     {
     //@tswow-end
         for (uint8 i = 0; i < MAX_RUNES; ++i)
@@ -2048,7 +2048,7 @@ void Player::RegenerateAll()
 
         Regenerate(POWER_RAGE);
         //@tswow-begin
-        if (MatchRaceClassMask(sObjectMgr->_raceHasRunes[GetClass()], sObjectMgr->_classHasRunes,false))
+        if (HasRunes())
             Regenerate(POWER_RUNIC_POWER);
 
         m_regenTimerCount -= 2000;
@@ -24773,7 +24773,7 @@ void Player::AtExitCombat()
     UpdatePotionCooldown();
 
     //@tswow-begin
-    if (MatchRaceClassMask(sObjectMgr->_raceHasRunes[GetClass()], sObjectMgr->_classHasRunes,false))
+    if (HasRunes())
         for (uint8 i = 0; i < MAX_RUNES; ++i)
         {
             SetRuneTimer(i, 0xFFFFFFFF);
@@ -25174,7 +25174,7 @@ void Player::ConvertRune(uint8 index, RuneType newType)
 void Player::ResyncRunes() const
 {
     //@tswow-begin
-    if (!MatchRaceClassMask(sObjectMgr->_raceHasRunes[GetClass()], sObjectMgr->_classHasRunes,false))
+    if (!HasRunes())
         return;
     //@tswow-end
 
@@ -25210,7 +25210,7 @@ static RuneType runeSlotTypes[MAX_RUNES] =
 void Player::InitRunes()
 {
     //@tswow-begin
-    if (!MatchRaceClassMask(sObjectMgr->_raceHasRunes[GetClass()], sObjectMgr->_classHasRunes,false))
+    if (!HasRunes())
         return;
     //@tswow-end
 

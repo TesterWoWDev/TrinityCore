@@ -10210,7 +10210,6 @@ void ObjectMgr::LoadCreatureDefaultTrainers()
 // @tswow-begin
 void ObjectMgr::LoadRaceClassRuneCombos()
 {
-    _classHasRunes = 0;
     if (QueryResult result = WorldDatabase.Query("SELECT classID, raceID FROM class_has_runes"))
     {
         do
@@ -10218,9 +10217,26 @@ void ObjectMgr::LoadRaceClassRuneCombos()
             Field* fields = result->Fetch();
             uint32 classID = fields[0].GetUInt32();
             uint32 raceID = fields[1].GetUInt32();
-            _classHasRunes |= (1 << (classID - 1));
-            _raceHasRunes[classID] |= (1 << (raceID - 1));
 
+            bool classError = classID >= MAX_CLASSES;
+            bool raceError = raceID >= MAX_RACES;
+
+            if (classError)
+            {
+                TC_LOG_ERROR("sql.sql", "Table `class_has_runes` references non-existing class id %u, ignoring", classID);
+            }
+
+            if (raceError)
+            {
+                TC_LOG_ERROR("sql.sql", "Table `class_has_runes` references non-existing race id %u, ignoring", raceID);
+            }
+
+            if (classError || raceError)
+            {
+                continue;
+            }
+
+            _classHasRunes[classID] |= (1 << (raceID - 1));
         } while (result->NextRow());
     }
 }
