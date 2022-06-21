@@ -10218,8 +10218,8 @@ void ObjectMgr::LoadRaceClassRuneCombos()
             uint32 classID = fields[0].GetUInt32();
             uint32 raceID = fields[1].GetUInt32();
 
-            bool classError = classID >= MAX_CLASSES;
-            bool raceError = raceID >= MAX_RACES;
+            bool classError = classID > MAX_CLASSES;
+            bool raceError = raceID > MAX_RACES;
 
             if (classError)
             {
@@ -10236,7 +10236,7 @@ void ObjectMgr::LoadRaceClassRuneCombos()
                 continue;
             }
 
-            _classHasRunes[classID] |= (1 << (raceID - 1));
+            _classHasRunes[classID - 1] |= (1 << (raceID - 1));
         } while (result->NextRow());
     }
 }
